@@ -29,6 +29,9 @@ instance Num CExpr where
   (-)         = cOp CSubOp
   abs a       = ternary (a >=: 0) a (negate a)
   signum a    = ternary (a >=: 0) (ternary (a ==: 0) a 1) (-1)
+instance Fractional CExpr where
+  (/)          = cOp CDivOp
+  fromRational = CConst . flip CFloatConst undefNode . cFloat . fromRational
 
 var :: Ident -> CExpr
 var = flip CVar undefNode
