@@ -58,7 +58,7 @@ union  = csu CUnionTag
 
 fun :: [CDeclSpec] -> String -> [Maybe CExpr -> CDecl] -> CStat -> CFunDef
 fun specs name args body = CFunDef specs decl [] body undefNode
-  where decl =CDeclr (Just $ fromString name)
+  where decl = CDeclr (Just $ fromString name)
                [CFunDeclr (Right (fmap ($Nothing) args, False)) [] undefNode]
                Nothing [] undefNode
 
