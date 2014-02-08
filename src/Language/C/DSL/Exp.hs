@@ -70,8 +70,8 @@ data UnOp = PlusPlus
           | Minus
           | Plus
           | Not
-          | Addr -- | The address of operator @&@.
-          | Ind -- | The dereferencing operator in C @*@.
+          | Addr -- ^ The address of operator @&@.
+          | Ind -- ^ The dereferencing operator in C @*@.
           deriving(Eq, Show)
 
 -- | Convert a 'UnOp' to the corresponding 'CUnaryOp'.

@@ -1,4 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
+-- | The home of all the orphaned 'IsString' instances
+-- used throughout the DSL.
 module Language.C.DSL.StringLike where
 import Data.String
 import Language.C
