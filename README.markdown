@@ -1,4 +1,4 @@
-A higher level DSL for writing C in Haskell on top of [language-c](hackage.haskell.org/package/language-c).
+A higher level DSL for writing C in Haskell on top of [language-c](http://hackage.haskell.org/package/language-c).
 
 As a trivial example
 
