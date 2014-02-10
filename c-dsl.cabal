@@ -10,6 +10,9 @@ maintainer:          danny.gratzer@gmail.com
 category:            Language
 build-type:          Simple
 cabal-version:       >=1.10
+source-repository head
+                  type:     hg
+                  location: http://bitbucket.org/jozefg/c-dsl
 library
    exposed-modules:     Language.C.DSL,
                         Language.C.DSL.Decl,
