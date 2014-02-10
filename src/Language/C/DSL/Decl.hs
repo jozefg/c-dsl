@@ -5,7 +5,11 @@ import Data.String
 import Language.C.DSL.StringLike
 
 -- | A low level way to declare something.
-decl :: CDeclSpec -> CDeclr -> Maybe CExpr -> CDecl
+decl :: CDeclSpec -- ^ The declaration specifier, usually this is a type
+        -> CDeclr -- ^ Equivalent to the name of the object being declared. Often this will
+                  -- make use of the overloaded string instance for 'CDeclr's
+        -> Maybe CExpr -- ^ The optional init expression
+        -> CDecl
 decl ty name exp = CDecl [ty] [(Just name, flip CInitExpr undefNode `fmap` exp, Nothing)] undefNode
 
 -- | Simple types that can be used in declarations.
