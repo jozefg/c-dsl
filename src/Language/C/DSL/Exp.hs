@@ -14,13 +14,28 @@ str = CConst . flip CStrConst undefNode . cString
 cOp :: CBinaryOp -> CExpr -> CExpr -> CExpr
 cOp op a b = CBinary op a b undefNode
 
--- | Comparison operators, normal haskell operators with @:@ at the end.
-(==:), (/=:), (<:), (>:), (<=:), (>=:) :: CExpr -> CExpr -> CExpr
+-- | Equality test, @a ==: b@ is equivalent to @a == b@
+(==:) :: CExpr -> CExpr -> CExpr
 (==:) = cOp CEqOp
+
+-- | Inequality test, @a /=: b@ is equivalent to @a != b@
+(/=:) :: CExpr -> CExpr -> CExpr
 (/=:) = cOp CNeqOp
+
+-- | Less-than test, @a <: b@ is equivalent to @a < b@
+(<:) :: CExpr -> CExpr -> CExpr
 (<:)  = cOp CLeOp
+
+-- | Greater-than test, @a >: b@ is equivalent to @a > b@
+(>:) :: CExpr -> CExpr -> CExpr
 (>:)  = cOp CGrOp
+
+-- | Less than or equal to, @a <=: b@ is equivalent to @a <= b@
+(<=:) :: CExpr -> CExpr -> CExpr
 (<=:) = cOp CLeqOp
+
+-- | Greater than or equal to, @a >=: b@ is equivalent to @a >= b@
+(>=:) :: CExpr -> CExpr -> CExpr
 (>=:) = cOp CGeqOp
 
 -- | The ternary operator in C. @ternary a b c@ will turn into @a ? b : c@.
