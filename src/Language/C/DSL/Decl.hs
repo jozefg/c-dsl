@@ -5,20 +5,39 @@ import Data.String
 import Language.C.DSL.StringLike
 
 -- | A low level way to declare something.
-decl :: CDeclSpec -- ^ The declaration specifier, usually this is a type
-        -> CDeclr -- ^ Equivalent to the name of the object being declared. Often this will
-                  -- make use of the overloaded string instance for 'CDeclr's
+decl :: CDeclSpec       -- ^ The declaration specifier, usually this is a type
+        -> CDeclr      -- ^ Equivalent to the name of the object being declared. Often this will
+                       -- make use of the overloaded string instance for 'CDeclr's
         -> Maybe CExpr -- ^ The optional init expression
         -> CDecl
 decl ty name exp = CDecl [ty] [(Just name, flip CInitExpr undefNode `fmap` exp, Nothing)] undefNode
 
-voidTy, charTy, shortTy, intTy, longTy, floatTy :: CDeclSpec
-voidTy   = CTypeSpec $ CVoidType undefNode
-charTy   = CTypeSpec $ CCharType undefNode
+-- | The 'CDeclSpec' for declarations of type @void@
+voidTy  :: CDeclSpec
+voidTy = CTypeSpec $ CVoidType undefNode
+
+-- | The 'CDeclSpec' for declarations of type @char@
+charTy  :: CDeclSpec
+charTy = CTypeSpec $ CCharType undefNode
+
+-- | The 'CDeclSpec' for declarations of type @short@
+shortTy :: CDeclSpec
 shortTy  = CTypeSpec $ CShortType undefNode
-intTy    = CTypeSpec $ CIntType undefNode
-longTy   = CTypeSpec $ CLongType undefNode
+
+-- | The 'CDeclSpec' for declarations of type @int@
+intTy :: CDeclSpec
+intTy = CTypeSpec $ CIntType undefNode
+
+-- | The 'CDeclSpec' for declarations of type @long@
+longTy :: CDeclSpec
+longTy = CTypeSpec $ CLongType undefNode
+
+-- | The 'CDeclSpec' for declarations of type @float@
+floatTy :: CDeclSpec
 floatTy  = CTypeSpec $ CFloatType undefNode
+
+-- | The 'CDeclSpec' for declarations of type @double@
+doubleTy :: CDeclSpec
 doubleTy = CTypeSpec $ CDoubleType undefNode
 
 -- | Modifies a declarator to be a pointer. For example
@@ -38,18 +57,23 @@ ptr (CDeclr nm mods cstr attrs node) = CDeclr nm (CPtrDeclr [] undefNode : mods)
 char :: CDeclr -> Maybe CExpr -> CDecl
 char   = decl charTy
 
+-- | A short cut for declaring a @short@
 short :: CDeclr -> Maybe CExpr -> CDecl
 short  = decl shortTy
 
+-- | A short cut for declaring a @int@
 int :: CDeclr -> Maybe CExpr -> CDecl
 int    = decl intTy
 
+-- | A short cut for declaring a @long@
 long :: CDeclr -> Maybe CExpr -> CDecl
 long   = decl longTy
 
+-- | A short cut for declaring a @float@
 float :: CDeclr -> Maybe CExpr -> CDecl
 float  = decl floatTy
 
+-- | A short cut for declaring a @double@
 double :: CDeclr -> Maybe CExpr -> CDecl
 double = decl doubleTy
 
@@ -133,4 +157,3 @@ instance External CStrLit where
 -- | Exports a series of declarations to a translation unit.
 transUnit :: [CExtDecl] -> CTranslUnit
 transUnit = flip CTranslUnit undefNode
-
