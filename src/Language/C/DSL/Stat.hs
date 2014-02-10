@@ -15,6 +15,7 @@ while :: CExpr -> CStat -> CStat
 while exp stat = CWhile exp stat False undefNode
 
 -- | A for loop, an example use
+-- 
 -- > for(int "x" .= 1, 1, PlusPlus `pre` "x")
 -- >   "printf"#[str "%d\n", "x"]
 for :: (CDecl, CExpr, CExpr) -> CStat -> CStat

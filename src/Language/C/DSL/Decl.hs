@@ -22,14 +22,20 @@ floatTy  = CTypeSpec $ CFloatType undefNode
 doubleTy = CTypeSpec $ CDoubleType undefNode
 
 -- | Modifies a declarator to be a pointer. For example
--- @ptr "x"@ would be @*x@ in C.
+-- @ptr someName@ would be @*x@ in C.
 ptr :: CDeclr -> CDeclr
 ptr (CDeclr nm mods cstr attrs node) = CDeclr nm (CPtrDeclr [] undefNode : mods) cstr attrs node
 
-char :: CDeclr -> Maybe CExpr -> CDecl
--- ^ A short cut for declaring a @char@.
+-- | A short cut for declaring a @char@.
+-- 
 -- >     char "x" .= 1
 -- >     uninit $ char "y"
+--
+-- Would generate
+--
+-- > char x = 1;
+-- > char y;
+char :: CDeclr -> Maybe CExpr -> CDecl
 char   = decl charTy
 
 short :: CDeclr -> Maybe CExpr -> CDecl
@@ -47,8 +53,8 @@ float  = decl floatTy
 double :: CDeclr -> Maybe CExpr -> CDecl
 double = decl doubleTy
 
--- | Equivalent to 'char' but wraps the 'CDeclr' in a pointer.
--- This means that @charPtr "x" .= ...@ is equivalent to @char *x = ..."
+-- | Equivalent to @'char'@ but wraps the @'CDeclr'@ in a pointer.
+-- This means that @uninit $ charPtr someName@ is equivalent to @char *someName;@
 charPtr  :: CDeclr -> Maybe CExpr -> CDecl
 charPtr   = char . ptr
 
@@ -68,12 +74,14 @@ doublePtr:: CDeclr -> Maybe CExpr -> CDecl
 doublePtr = double . ptr
 
 
--- | Supplies an initializer for an expression.
+-- | Supplies an initializer for an for a declaration. This
+-- is meant to be used with the 'char' and friends short cuts
 (.=) :: (Maybe CExpr -> CDecl) -> CExpr -> CDecl
 f .= e = f (Just e)
 infixl 7 .=
 
--- | Leave a declaration uninitialized. For example @uninit $ char "x"@.
+-- | Leave a declaration uninitialized. This is meant to be used
+-- with the 'char' and friends declaration
 uninit :: (Maybe CExpr -> CDecl) -> CDecl
 uninit = ($ Nothing)
 
@@ -95,11 +103,14 @@ union :: String -> [(String, CTypeSpec)] -> CDecl
 union  = csu CUnionTag
 
 -- | Defines a C function. For example
+-- 
 -- >    test =
 -- >       fun [intTy] "test"[int "a", int "b"] $ hblock [
 -- >           creturn ("a" + "b")
 -- >       ]
+-- 
 -- Would be the equivalent of
+-- 
 -- >   int test(int a, int b)
 -- >   {
 -- >      return a + b;
