@@ -12,7 +12,6 @@ decl :: CDeclSpec -- ^ The declaration specifier, usually this is a type
         -> CDecl
 decl ty name exp = CDecl [ty] [(Just name, flip CInitExpr undefNode `fmap` exp, Nothing)] undefNode
 
--- | Simple types that can be used in declarations.
 voidTy, charTy, shortTy, intTy, longTy, floatTy :: CDeclSpec
 voidTy   = CTypeSpec $ CVoidType undefNode
 charTy   = CTypeSpec $ CCharType undefNode
@@ -27,24 +26,47 @@ doubleTy = CTypeSpec $ CDoubleType undefNode
 ptr :: CDeclr -> CDeclr
 ptr (CDeclr nm mods cstr attrs node) = CDeclr nm (CPtrDeclr [] undefNode : mods) cstr attrs node
 
--- | Clever functions that can be applied to declarators, for example @int "x" .= 1@ is equivalent
--- to @int x = 1@. To leave a variable uninitialized @int "x" Nothing@ does the job.
-char, short, int, long, float, double :: CDeclr -> Maybe CExpr -> CDecl
+char :: CDeclr -> Maybe CExpr -> CDecl
+-- ^ A short cut for declaring a @char@.
+-- >     char "x" .= 1
+-- >     uninit $ char "y"
 char   = decl charTy
+
+short :: CDeclr -> Maybe CExpr -> CDecl
 short  = decl shortTy
+
+int :: CDeclr -> Maybe CExpr -> CDecl
 int    = decl intTy
+
+long :: CDeclr -> Maybe CExpr -> CDecl
 long   = decl longTy
+
+float :: CDeclr -> Maybe CExpr -> CDecl
 float  = decl floatTy
+
+double :: CDeclr -> Maybe CExpr -> CDecl
 double = decl doubleTy
 
--- | Equivalent to the above but with pointer wrappers.
-charPtr, shortPtr, intPtr, longPtr, floatPtr, doublePtr :: CDeclr -> Maybe CExpr -> CDecl
+-- | Equivalent to 'char' but wraps the 'CDeclr' in a pointer.
+-- This means that @charPtr "x" .= ...@ is equivalent to @char *x = ..."
+charPtr  :: CDeclr -> Maybe CExpr -> CDecl
 charPtr   = char . ptr
+
+shortPtr :: CDeclr -> Maybe CExpr -> CDecl
 shortPtr  = short . ptr
+
+intPtr   :: CDeclr -> Maybe CExpr -> CDecl
 intPtr    = int . ptr
+
+longPtr  :: CDeclr -> Maybe CExpr -> CDecl
 longPtr   = long . ptr
+
+floatPtr :: CDeclr -> Maybe CExpr -> CDecl
 floatPtr  = float . ptr
+
+doublePtr:: CDeclr -> Maybe CExpr -> CDecl
 doublePtr = double . ptr
+
 
 -- | Supplies an initializer for an expression.
 (.=) :: (Maybe CExpr -> CDecl) -> CExpr -> CDecl
@@ -63,13 +85,16 @@ csu tag ident fields = CDecl
   where structTy  = CStruct tag (Just $ fromString ident) (Just $ map structify fields) [] undefNode
         structify (name, ty) = CDecl [CTypeSpec ty] [(Just (fromString name), Nothing, Nothing)] undefNode
 
-struct, union :: String -> [(String, CTypeSpec)] -> CDecl
--- ^ Create a structure or union, for example @struct "foo" [("bar", intTy)]@ is
+-- | Create a structure, for example @struct "foo" [("bar", intTy)]@ is
 -- @typedef struct foo {int bar;} foo;@
+struct ::  String -> [(String, CTypeSpec)] -> CDecl
 struct = csu CStructTag
+
+-- | Equivalent to 'struct' but generates a C union instead.
+union :: String -> [(String, CTypeSpec)] -> CDecl
 union  = csu CUnionTag
 
--- Defines a C function. For example
+-- | Defines a C function. For example
 -- >    test =
 -- >       fun [intTy] "test"[int "a", int "b"] $ hblock [
 -- >           creturn ("a" + "b")
