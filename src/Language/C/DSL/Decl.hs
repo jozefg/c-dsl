@@ -40,6 +40,13 @@ floatTy  = CTypeSpec $ CFloatType undefNode
 doubleTy :: CDeclSpec
 doubleTy = CTypeSpec $ CDoubleType undefNode
 
+
+-- | Turns a string into the corresponding typedef'd type.
+-- For example @struct "foo" [("bar, ty "quux")] @ will generate the corresponding
+-- @typedef foo {quux bar;} foo@.
+ty :: Ident -> CTypeSpec
+ty = flip CTypeDef undefNode
+
 -- | Modifies a declarator to be a pointer. For example
 -- @ptr someName@ would be @*x@ in C.
 ptr :: CDeclr -> CDeclr
