@@ -1,8 +1,27 @@
--- | This module simply exists to export the entirety of the DSL and as
--- a convenience, "Language.C".
-
-
-
+{-# LANGUAGE OverloadedStrings #-}
+-- | This module provides a more pleasant way to write C ASTs for language-c
+-- As a simple example,
+-- 
+-- > {-# LANGUAGE OverloadedStrings #-}
+-- >
+-- > import Language.C.DSL
+-- >
+-- > example :: CFunDef
+-- > example =
+-- >   fun [intTy] "foo"[int "a", int "b"] $ block [
+-- >       creturn $ "a" + "b"
+-- >   ]
+-- >
+-- 
+-- And when loaded into GHCi
+-- 
+-- > Main*> pretty example
+-- > int foo(int a, int b)
+-- > {
+-- >   return a + b;
+-- > }
+-- 
+-- This module also exports "Language.C" for simplicity.
 module Language.C.DSL (
   module Language.C.DSL.StringLike,
   module Language.C.DSL.Exp,

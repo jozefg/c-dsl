@@ -3,29 +3,6 @@ version:             0.3
 synopsis:            A higher level DSL on top of language-c
 description:         This DSL is meant to make it easier to write language-c's DSL by providing simple
                      functions/operators for writing C AST's in Haskell.
-
-                     As a simple example,
-
-                     > {-# LANGUAGE OverloadedStrings #-}
-                     >
-                     > import Language.C.DSL
-                     >
-                     > example :: CFunDef
-                     > example =
-                     >   fun [intTy] "foo"[int "a", int "b"] $ block [
-                     >       creturn $ "a" + "b"
-                     >   ]
-                     >
-
-                     And when loaded into GHCi
-
-                     > Main*> pretty example
-                     > int foo(int a, int b)
-                     > {
-                     >   return a + b;
-                     > }
-
-                     
 license:             MIT
 license-file:        LICENSE
 author:              Danny Gratzer

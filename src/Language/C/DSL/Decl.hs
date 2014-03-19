@@ -70,9 +70,15 @@ doubleTy :: CDeclSpec
 doubleTy = CTypeSpec $ CDoubleType undefNode
 
 
--- | Turns a string into the corresponding typedef'd type.
--- For example @struct "foo" [("bar, ty "quux")] @ will generate the corresponding
--- @typedef foo {quux bar;} foo@.
+-- | Turns a string into the corresponding typedefed type.
+-- 
+-- For example
+-- 
+-- > struct "foo" [("bar, ty "quux")]
+-- 
+-- will generate the corresponding
+-- 
+-- > typedef foo {quux bar;} foo
 ty :: Ident -> CTypeSpec
 ty = flip CTypeDef undefNode
 
