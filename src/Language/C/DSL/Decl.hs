@@ -176,10 +176,17 @@ union  = csu CUnionTag
 -- >      return a + b;
 -- >   }
 fun :: [CDeclSpec] -> String -> [Maybe CExpr -> CDecl] -> CStat -> CFunDef
-fun specs name args body = CFunDef specs decl [] body undefNode
+fun specs name args body = annotatedFun specs name args [] body
+
+-- | Identical to fun except this annotates the list of attributes given
+-- as a list of strings.
+annotatedFun :: [CDeclSpec] -> String -> [Maybe CExpr -> CDecl] -> [String] -> CStat -> CFunDef
+annotatedFun specs name args annots body = CFunDef specs decl [] body undefNode
   where decl = CDeclr (Just $ fromString name)
                [CFunDeclr (Right (fmap ($Nothing) args, False)) [] undefNode]
-               Nothing [] undefNode
+               Nothing attrs undefNode
+        attrs :: [CAttr]
+        attrs = map (\ s -> CAttr (fromString s) [] undefNode) annots
 
 class External a where
   export :: a -> CExtDecl
