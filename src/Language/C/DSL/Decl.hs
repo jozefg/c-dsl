@@ -12,6 +12,35 @@ decl :: CDeclSpec       -- ^ The declaration specifier, usually this is a type
         -> CDecl
 decl ty name exp = CDecl [ty] [(Just name, flip CInitExpr undefNode `fmap` exp, Nothing)] undefNode
 
+-- | The 'CTypeSpec' for @void@
+voidSpec  :: CTypeSpec
+voidSpec = CVoidType undefNode
+
+-- | The 'CTypeSpec' for @char@
+charSpec  :: CTypeSpec
+charSpec = CCharType undefNode
+
+-- | The 'CTypeSpec' for @short@
+shortSpec :: CTypeSpec
+shortSpec  = CShortType undefNode
+
+-- | The 'CTypeSpec' for @int@
+intSpec :: CTypeSpec
+intSpec = CIntType undefNode
+
+-- | The 'CTypeSpec' for @long@
+longSpec :: CTypeSpec
+longSpec = CLongType undefNode
+
+-- | The 'CTypeSpec' for @float@
+floatSpec :: CTypeSpec
+floatSpec  = CFloatType undefNode
+
+-- | The 'CTypeSpec' for @double@
+doubleSpec :: CTypeSpec
+doubleSpec = CDoubleType undefNode
+
+
 -- | The 'CDeclSpec' for declarations of type @void@
 voidTy  :: CDeclSpec
 voidTy = CTypeSpec $ CVoidType undefNode
