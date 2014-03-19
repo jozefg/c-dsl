@@ -12,3 +12,5 @@ instance IsString CDeclr where
   fromString str = CDeclr (Just $ fromString str) [] Nothing [] undefNode
 instance IsString CDecl where
   fromString str = CDecl [CTypeSpec (CTypeDef (fromString str) undefNode)] [] undefNode
+instance IsString CTypeSpec where
+  fromString = flip CTypeDef undefNode . fromString
