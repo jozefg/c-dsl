@@ -2,6 +2,10 @@
 -- | This module contians the DSL for writing @CExpr@s.
 -- It doesn't export the orphan instance for @IsString CExpr@ which
 -- can be found in "Language.C.DSL.StringLike".
+-- 
+-- This module also contains an orphan instance for 'Num' for @CExpr@.
+-- This orphan instances contains inline implementations of 'abs' and
+-- 'signum' in C rather than relying on something from @math.h@.
 module Language.C.DSL.Exp where
 import Language.C
 import Data.String
